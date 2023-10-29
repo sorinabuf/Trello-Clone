@@ -1,5 +1,5 @@
 export async function addUser(email: string) {
-  const response = await fetch("http://localhost:5328/users", {
+  const response = await fetch("http://localhost:5328/api/users", {
     method: "POST",
     body: JSON.stringify({ email: email }),
     headers: {
@@ -11,7 +11,7 @@ export async function addUser(email: string) {
 }
 
 export async function getUser(email: string) {
-  const response = await fetch("http://localhost:5328/users?email=" + email);
+  const response = await fetch("http://localhost:5328/api/users?email=" + email);
 
   return await response.json();
 }

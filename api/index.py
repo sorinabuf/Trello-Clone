@@ -12,7 +12,7 @@ metrics = PrometheusMetrics(app)
 
 ################################# USER TABLE ###################################
 
-@app.route("/users", methods=["POST"])
+@app.route("/api/users", methods=["POST"])
 def add_user():
     body = request.get_json()
     email = body["email"]
@@ -21,7 +21,7 @@ def add_user():
 
     return json.dumps(new_user), HTTPStatus.CREATED
 
-@app.route("/users", methods=["GET"])
+@app.route("/api/users", methods=["GET"])
 def get_user():
     email = request.args.get("email")
     user = db_utils.get_user(email)
