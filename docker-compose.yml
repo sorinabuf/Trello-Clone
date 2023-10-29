@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  trello-db:
+    image: postgres:latest
+    container_name: trello-db
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=TrelloDB
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - ./api/trello-db/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - trello-db-data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: pgadmin
+    depends_on:
+      - trello-db
+    ports:
+      - 5050:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+
+volumes:
+  trello-db-data:
