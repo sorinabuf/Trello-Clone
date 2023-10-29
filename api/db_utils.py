@@ -1,11 +1,12 @@
 import psycopg2
 
 connection = psycopg2.connect(
-    host="localhost",
-    port=5432,
-    database="TrelloDB",
-    user="admin",
-    password="admin"
+    # host="localhost",
+    # port=5432,
+    # database="TrelloDB",
+    # user="admin",
+    # password="admin"
+    "postgres://oiopcrwa:Njw1e-ZjQ5uU0nWqO2cZyGVh1Yq9Y5HS@cornelius.db.elephantsql.com/oiopcrwa"
 )
 
 def add_user(email):
