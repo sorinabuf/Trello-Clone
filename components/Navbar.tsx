@@ -1,30 +1,32 @@
+"use client";
+
 import { useAuth } from "@/contexts/AuthContext";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Button, Divider, Tooltip } from "@mui/material";
 import { useRouter } from "next/navigation";
-import styles from "@/styles/Boards.module.css";
+import styles from "@/styles/pages.module.css";
 import logo from "@/public/logo.png";
 
 export default function Navbar() {
   const { logout, setCurrentUserId, currentUser } = useAuth();
   const router = useRouter();
 
-  const dividerStyle = {
-    backgroundColor: "#363F47",
-  };
-
-  const imgStyle = {
-    width: "auto",
-    height: "30px",
-  };
-
-  const navbarStyle = {
+  const navbarContainerStyle = {
     display: "flex",
     justifyContent: "space-between",
     padding: "10px",
   };
 
-  const groupStyle = {
+  const underlineStyle = {
+    backgroundColor: "#363F47",
+  };
+
+  const logoStyle = {
+    width: "auto",
+    height: "30px",
+  };
+
+  const navbarSectionStyle = {
     display: "flex",
     alignItems: "center",
     gap: "20px",
@@ -39,30 +41,32 @@ export default function Navbar() {
     marginLeft: "20px",
   };
 
-  async function handleLogout() {
-    logout().then(() => {
-        router.push("/");
+  function handleLogout() {
+    logout()
+      .then(() => {
+        router.push("/login");
         setCurrentUserId(null);
-      }).catch((error) => {
-      console.log(error);
-    });
+      })
+      .catch((_) => {
+        console.log("Logout failed.");
+      });
   }
 
   return (
     <>
-      <div style={navbarStyle}>
-        <div style={groupStyle}>
-          <img src={logo.src} style={imgStyle} />
+      <div style={navbarContainerStyle}>
+        <div style={navbarSectionStyle}>
+          <img src={logo.src} style={logoStyle} />
           <div
             style={boardsButtonStyle}
             className={styles["boards-button"]}
-            onClick={() => router.push("/boards")}
+            onClick={() => router.push("/")}
           >
             Boards
           </div>
         </div>
 
-        <div style={groupStyle}>
+        <div style={navbarSectionStyle}>
           {currentUser && (
             <Tooltip title={currentUser["email"]} arrow>
               <AccountCircleIcon sx={{ color: "white" }} />
@@ -80,7 +84,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      <Divider style={dividerStyle} />
+      <Divider style={underlineStyle} />
     </>
   );
 }

@@ -1,21 +1,24 @@
+"use client";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, Divider, IconButton, Input, Typography } from "@mui/material";
-import styles from "@/styles/Boards.module.css";
 import {
   addCard,
   deleteBoardList,
   getCards,
   updateBoardList,
 } from "@/utils/data";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import Card from "./Card";
+import { CardList } from "./CardLists";
+import styles from "@/styles/pages.module.css";
 
 interface Props {
   id: number;
   name: string;
-  lists: any;
-  setLists: any;
+  lists: CardList[];
+  setLists: React.Dispatch<React.SetStateAction<CardList[]>>;
 }
 
 export default function CardList({ id, name, lists, setLists }: Props) {
@@ -42,6 +45,7 @@ export default function CardList({ id, name, lists, setLists }: Props) {
     padding: "10px 15px",
     marginRight: "15px",
     marginTop: "15px",
+    justifyContent: "start",
   };
 
   const addCardStyle = {
@@ -77,9 +81,9 @@ export default function CardList({ id, name, lists, setLists }: Props) {
     });
   }
 
-  const handleListNameChange = (event: any) => {
+  function handleListNameChange(event: any) {
     setListNameEditValue(event.target.value);
-  };
+  }
 
   function handleEditListName() {
     setTimeout(() => {
@@ -95,7 +99,7 @@ export default function CardList({ id, name, lists, setLists }: Props) {
 
       if (listNameEditValue !== name && listNameEditValue !== "") {
         updateBoardList(listNameEditValue, id).then(() => {
-          console.log("Updated list name");
+          console.log("Updated list name.");
         });
       }
     }, 100);
@@ -106,7 +110,7 @@ export default function CardList({ id, name, lists, setLists }: Props) {
     setCardNameValue("");
   }
 
-  const handleAddCard = () => {
+  function handleAddCard() {
     if (cardNameValue === "") {
       handleCloseAdd();
     } else {
@@ -125,11 +129,11 @@ export default function CardList({ id, name, lists, setLists }: Props) {
         handleCloseAdd();
       });
     }
-  };
+  }
 
-  const handleCardNameChange = (event: any) => {
+  function handleCardNameChange(event: any) {
     setCardNameValue(event.target.value);
-  };
+  }
 
   useEffect(() => {
     setListNameEditValue(name);
@@ -138,7 +142,6 @@ export default function CardList({ id, name, lists, setLists }: Props) {
   useEffect(() => {
     getCards(id).then((cards) => {
       setCards(cards);
-      console.log(cards);
     });
   }, []);
 
@@ -174,7 +177,7 @@ export default function CardList({ id, name, lists, setLists }: Props) {
         </IconButton>
       </div>
 
-      <div className={styles["scrollable-container-vertical"]}>
+      <div className={styles["vertical-scrollable-container"]}>
         {cards.map((card, index) => (
           <Card
             cardId={card["card_id"]}
@@ -208,12 +211,12 @@ export default function CardList({ id, name, lists, setLists }: Props) {
       )}
 
       {!isCardAdd && (
-        <div style={addCardButtonStyle} className={styles["add-card"]}>
-          <Typography
-            variant="subtitle1"
-            style={{ fontWeight: "bold" }}
-            onClick={() => setIsCardAdd(!isCardAdd)}
-          >
+        <div
+          style={addCardButtonStyle}
+          className={styles["add-card"]}
+          onClick={() => setIsCardAdd(!isCardAdd)}
+        >
+          <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
             + Add a card
           </Typography>
         </div>

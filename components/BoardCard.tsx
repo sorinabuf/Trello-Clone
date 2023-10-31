@@ -1,16 +1,19 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import styles from "@/styles/Boards.module.css";
+import styles from "@/styles/pages.module.css";
 import { IconButton, Input, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteBoard, updateBoard } from "@/utils/data";
 import { useRouter } from "next/navigation";
+import { Board } from "./Boards";
 
 interface Props {
   id: number;
   name: string;
   backgroundImage: string;
-  boards: any;
-  setBoards: any;
+  boards: Board[];
+  setBoards: React.Dispatch<React.SetStateAction<Board[]>>;
 }
 
 export default function BoardCard({
@@ -20,14 +23,9 @@ export default function BoardCard({
   boards,
   setBoards,
 }: Props) {
-  const deleteIconStyle = {
-    display: "flex",
-    justifyContent: "end",
-  };
-
   const nameStyle = { padding: "25px 40px" };
 
-  const cardStyle = {
+  const backgroundImageStyle = {
     backgroundImage: "url(" + backgroundImage + ")",
   };
 
@@ -36,20 +34,17 @@ export default function BoardCard({
   const [isEdit, setIsEdit] = useState(false);
   const [editValue, setEditValue] = useState(name);
 
-  const handleNameChange = (event: any) => {
+  function handleNameChange(event: any) {
     setEditValue(event.target.value);
-  };
+  }
 
   function handleDeleteBoard(id: number) {
     deleteBoard(id).then(() => {
       setBoards(boards.filter((board: any) => board["board_id"] !== id));
+
+      console.log("Deleted board.");
     });
   }
-
-  useEffect(() => {
-    setEditValue(name);
-  }, [name]);
-
 
   function handleEditName() {
     setTimeout(() => {
@@ -67,25 +62,26 @@ export default function BoardCard({
 
     if (editValue !== name && editValue !== "") {
       updateBoard(editValue, id).then(() => {
-        console.log("Updated board name");
+        console.log("Updated board name.");
       });
     }
   }
 
+  useEffect(() => {
+    setEditValue(name);
+  }, [name]);
+
   return (
     <div
       className={styles.card}
-      style={cardStyle}
+      style={backgroundImageStyle}
       onClick={() => {
         if (!isEdit) {
           router.push(`/boards/${id}`);
         }
       }}
     >
-      <div
-        className={`${styles["full-width"]} ${styles["delete-icon"]}`}
-        style={deleteIconStyle}
-      >
+      <div className={`${styles["full-width"]} ${styles["delete-icon"]}`}>
         <IconButton
           size="small"
           disableRipple
@@ -101,7 +97,7 @@ export default function BoardCard({
       {isEdit && (
         <div style={nameStyle}>
           <Input
-            className={styles["input-font"]}
+            className={styles["board-input-font"]}
             type="text"
             value={editValue}
             onChange={handleNameChange}

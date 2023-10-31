@@ -1,10 +1,10 @@
-import { Button, Dialog, IconButton, Input } from "@mui/material";
-import NotesIcon from "@mui/icons-material/Notes";
-import TitleIcon from "@mui/icons-material/Title";
-import CloseIcon from "@mui/icons-material/Close";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useEffect, useState } from "react";
-import styles from "@/styles/Boards.module.css";
+import { Button, Dialog, IconButton, Input } from '@mui/material';
+import NotesIcon from '@mui/icons-material/Notes';
+import TitleIcon from '@mui/icons-material/Title';
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useEffect, useState } from 'react';
+import styles from '@/styles/pages.module.css';
 
 interface Props {
   open: boolean;
@@ -23,34 +23,34 @@ export default function CardDialog({
   deleteCard,
 }: Props) {
   const inputStyle = {
-    backgroundColor: "#22272B",
-    borderRadius: "10px",
-    padding: "10px 15px",
-    margin: "15px",
+    backgroundColor: '#22272B',
+    borderRadius: '10px',
+    padding: '10px 15px',
+    margin: '15px',
   };
 
   const inputLabelStyle = {
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    marginTop: "25px",
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    marginTop: '25px',
   };
 
   const closeIconStyle = {
-    display: "flex",
-    justifyContent: "end",
+    display: 'flex',
+    justifyContent: 'end',
   };
 
   const buttonsStyle = {
-    display: "flex",
-    gap: "10px",
-    marginTop: "25px",
+    display: 'flex',
+    gap: '10px',
+    marginTop: '25px',
   };
 
   const deleteButtonStyle = {
-    display: "flex",
-    justifyContent: "end",
-    marginTop: "25px",
+    display: 'flex',
+    justifyContent: 'end',
+    marginTop: '25px',
   };
 
   const [nameValue, setNameValue] = useState(cardName);
@@ -65,7 +65,7 @@ export default function CardDialog({
     const newName = event.target.value;
     setNameValue(newName);
 
-    if (newName !== cardName && newName !== "") {
+    if (newName !== cardName && newName !== '') {
       setIsModified(true);
     }
   };
@@ -106,28 +106,28 @@ export default function CardDialog({
 
   return (
     <Dialog onClose={handleCardDialogClose} open={open}>
-      <div className={styles["card-dialog"]}>
+      <div className={styles['card-dialog']}>
         <div>
-          <div className={styles["full-width"]} style={closeIconStyle}>
+          <div className={styles['full-width']} style={closeIconStyle}>
             <IconButton
-              size="small"
+              size='small'
               disableRipple
               onClick={handleCardDialogClose}
             >
-              <CloseIcon sx={{ color: "#B6C2CF" }} />
+              <CloseIcon sx={{ color: '#B6C2CF' }} />
             </IconButton>
           </div>
 
           <div style={inputLabelStyle}>
-            <TitleIcon sx={{ color: "#B6C2CF" }} />
-            <span className={styles["card-input-font"]}>Name</span>
+            <TitleIcon sx={{ color: '#B6C2CF' }} />
+            <span className={styles['card-input-font']}>Name</span>
           </div>
 
           <div style={inputStyle}>
             <Input
               disableUnderline
-              className={styles["card-input-font"]}
-              type="text"
+              className={styles['card-input-font']}
+              type='text'
               value={nameValue}
               onChange={handleNameChange}
               fullWidth
@@ -137,21 +137,21 @@ export default function CardDialog({
           </div>
 
           <div style={inputLabelStyle}>
-            <NotesIcon sx={{ color: "#B6C2CF" }} />
-            <span className={styles["card-input-font"]}>Description</span>
+            <NotesIcon sx={{ color: '#B6C2CF' }} />
+            <span className={styles['card-input-font']}>Description</span>
           </div>
 
           <div style={inputStyle}>
             <Input
               disableUnderline
-              className={styles["card-input-font"]}
-              type="text"
+              className={styles['card-input-font']}
+              type='text'
               value={descriptionValue}
               onChange={handleDescriptionChange}
               placeholder={
-                descriptionValue === ""
-                  ? "Add a more detailed description..."
-                  : ""
+                descriptionValue === ''
+                  ? 'Add a more detailed description...'
+                  : ''
               }
               fullWidth
               multiline
@@ -161,7 +161,7 @@ export default function CardDialog({
 
           <div style={buttonsStyle}>
             <Button
-              variant="contained"
+              variant='contained'
               disableElevation
               disabled={!isModified}
               onClick={saveChanges}
@@ -174,12 +174,12 @@ export default function CardDialog({
 
         <div style={deleteButtonStyle}>
           <Button
-            variant="contained"
-            color="error"
+            variant='contained'
+            color='error'
             disableElevation
             onClick={handleDeleteCard}
           >
-            <DeleteIcon sx={{ marginRight: "5px", marginLeft: "-5px" }} />
+            <DeleteIcon sx={{ marginRight: '5px', marginLeft: '-5px' }} />
             Delete card
           </Button>
         </div>

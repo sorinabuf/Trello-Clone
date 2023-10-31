@@ -1,19 +1,20 @@
+"use client";
+
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
-import styles from "@/styles/Boards.module.css";
 import { useEffect, useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { addBoardList } from "@/utils/data";
+import { CardList } from "./CardLists";
+import styles from "@/styles/pages.module.css";
 
-export default function AddList({
-  boardId,
-  lists,
-  setLists,
-}: {
+interface Props {
   boardId: number;
-  lists: any;
-  setLists: any;
-}) {
+  lists: CardList[];
+  setLists: React.Dispatch<React.SetStateAction<CardList[]>>;
+}
+
+export default function AddList({ boardId, lists, setLists }: Props) {
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState(false);
   const [listName, setListName] = useState("");
@@ -24,29 +25,14 @@ export default function AddList({
     marginBottom: "15px",
   };
 
-  const spanColor = {
-    color: "red",
-  };
-
-  const addListStyle = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "5px",
-    borderRadius: "10px",
-    padding: "15px 30px 15px 10px",
-    backgroundColor: "#282E34",
-    color: "#B6C2CF",
-  };
-
-  const formStyle = {
+  const addListFormStyle = {
     borderRadius: "10px",
     padding: "20px 20px",
     backgroundColor: "#282E34",
     color: "#B6C2CF",
   };
 
-  const buttonsStyle = {
+  const addListFormButtonsStyle = {
     display: "flex",
     justifyContent: "space-between",
   };
@@ -61,8 +47,7 @@ export default function AddList({
       setLoading(true);
 
       addBoardList(name, boardId).then((response) => {
-        console.log("Added list");
-        console.log(formRef.current);
+        console.log("Added list.");
 
         formRef.current?.reset();
         setLoading(false);
@@ -73,7 +58,7 @@ export default function AddList({
           ...lists,
           {
             card_list_id: response["card_list_id"],
-            name: name
+            name: name,
           },
         ]);
       });
@@ -109,24 +94,24 @@ export default function AddList({
     <>
       {!isAdding && (
         <div
-          style={addListStyle}
-          className={styles["add-card"]}
+          className={`${styles["add-card"]} ${styles["add-list"]}`}
           onClick={handleClick}
         >
           <AddIcon />
           <Typography variant="h6">Add another list</Typography>
         </div>
       )}
+
       {isAdding && (
         <Box
           component="form"
           ref={formRef}
           onSubmit={handleSubmit}
-          style={formStyle}
+          style={addListFormStyle}
         >
           <div className={styles["full-width"]} style={dividerMargin}>
             <Typography variant="subtitle2" className={styles.header}>
-              List title <span style={spanColor}>*</span>
+              List title <span className={styles["red-span"]}>*</span>
             </Typography>
             <TextField
               id="name"
@@ -142,7 +127,7 @@ export default function AddList({
             />
           </div>
 
-          <div style={buttonsStyle}>
+          <div style={addListFormButtonsStyle}>
             <Button
               variant="contained"
               type="submit"

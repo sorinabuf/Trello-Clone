@@ -1,13 +1,19 @@
 import psycopg2
+from dotenv import find_dotenv, load_dotenv
+import os
+
+dotenv_path = find_dotenv()
+load_dotenv(dotenv_path)
 
 connection = psycopg2.connect(
-    # host="localhost",
-    # port=5432,
-    # database="TrelloDB",
-    # user="admin",
-    # password="admin"
-    "postgres://oiopcrwa:Njw1e-ZjQ5uU0nWqO2cZyGVh1Yq9Y5HS@cornelius.db.elephantsql.com/oiopcrwa"
+    host=os.getenv("DB_HOST"),
+    port=os.getenv("DB_PORT"),
+    database=os.getenv("DB_NAME"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD")
 )
+
+################################# USER TABLE ###################################
 
 def add_user(email):
     cursor = connection.cursor()
@@ -26,7 +32,6 @@ def get_user(email):
     cursor = connection.cursor()
 
     cursor.execute(f"SELECT * FROM \"user\" WHERE email = \'{email}\'")
-
     user = {
         "user_id": cursor.fetchone()[0]
     }
@@ -34,6 +39,8 @@ def get_user(email):
     cursor.close()
 
     return user
+
+################################# BOARD TABLE ##################################
 
 def add_user_board(user_id, name):
     cursor = connection.cursor()
@@ -47,6 +54,20 @@ def add_user_board(user_id, name):
     cursor.close()
 
     return new_board
+
+def get_user_boards(user_id):
+    cursor = connection.cursor()
+
+    cursor.execute(f"SELECT * FROM board WHERE user_id = {user_id} ORDER BY board_id")
+    board_rows = cursor.fetchall()
+
+    boards = []
+    for row in board_rows:
+        boards.append(dict(zip([column[0] for column in cursor.description], row)))
+
+    cursor.close()
+
+    return boards
 
 def get_board(board_id):
     cursor = connection.cursor()
@@ -62,20 +83,6 @@ def get_board(board_id):
     cursor.close()
 
     return board
-
-def get_all_user_boards(user_id):
-    cursor = connection.cursor()
-
-    cursor.execute(f"SELECT * FROM board WHERE user_id = {user_id} ORDER BY board_id")
-    board_rows = cursor.fetchall()
-
-    boards = []
-    for row in board_rows:
-        boards.append(dict(zip([column[0] for column in cursor.description], row)))
-
-    cursor.close()
-
-    return boards
 
 def delete_board(board_id):
     cursor = connection.cursor()
@@ -93,7 +100,9 @@ def update_board(board_id, name):
     connection.commit()
     cursor.close()
 
-def add_board_list(name, board_id):
+############################### CARD_LIST TABLE ################################
+
+def add_board_card_list(name, board_id):
     cursor = connection.cursor()
 
     cursor.execute(f"INSERT INTO card_list (name) VALUES (\'{name}\') RETURNING card_list_id")
@@ -108,7 +117,7 @@ def add_board_list(name, board_id):
 
     return new_card_list
 
-def get_all_board_lists(board_id):
+def get_board_card_lists(board_id):
     cursor = connection.cursor()
 
     cursor.execute(f"SELECT c.card_list_id, c.name FROM board_card_list b, card_list c WHERE b.card_list_id = c.card_list_id \
@@ -139,7 +148,9 @@ def update_card_list(card_list_id, name):
     connection.commit()
     cursor.close()
 
-def add_card(card_list_id, name, description):
+################################# CARD TABLE ###################################
+
+def add_card_list_card(card_list_id, name, description):
     cursor = connection.cursor()
 
     cursor.execute(f"INSERT INTO card (name, description) VALUES (\'{name}\', \'{description}\') RETURNING card_id")
@@ -154,7 +165,7 @@ def add_card(card_list_id, name, description):
 
     return new_card
 
-def get_all_list_cards(card_list_id):
+def get_card_list_cards(card_list_id):
     cursor = connection.cursor()
 
     cursor.execute(f"SELECT c.card_id, c.name, c.description FROM card c, card_list_element cl WHERE c.card_id = cl.card_id \

@@ -1,24 +1,19 @@
+"use client";
+
 import { useAuth } from "@/contexts/AuthContext";
-import styles from "@/styles/Boards.module.css";
 import { addBoard } from "@/utils/data";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
+import styles from "@/styles/pages.module.css";
+import { Board } from "./Boards";
 
-export default function AddCard({
-  boards,
-  setBoards,
-}: {
-  boards: any;
-  setBoards: any;
-}) {
-  const cardStyle = {
-    display: "flex",
-    backgroundColor: "#282E34",
-    alignItems: "center",
-    justifyContent: "center",
-  };
+interface Props {
+  boards: Board[];
+  setBoards: React.Dispatch<React.SetStateAction<Board[]>>;
+}
 
+export default function AddBoardCard({ boards, setBoards }: Props) {
   const dividerMargin = {
     marginBottom: "15px",
   };
@@ -26,14 +21,6 @@ export default function AddCard({
   const closeIconStyle = {
     display: "flex",
     justifyContent: "end",
-  };
-
-  const nameStyle = {
-    color: "#B6C2CF",
-  };
-
-  const spanColor = {
-    color: "red",
   };
 
   const { currentUserId } = useAuth();
@@ -52,7 +39,7 @@ export default function AddCard({
       setLoading(true);
 
       addBoard(name, currentUserId).then((response) => {
-        console.log("Added board");
+        console.log("Added board.");
         setIsAdding(false);
 
         setBoards([
@@ -93,13 +80,12 @@ export default function AddCard({
   }, [boardName]);
 
   return (
-    <div className={styles["card-container"]}>
+    <div style={{ position: "relative" }}>
       <div
         className={`${styles.card} ${styles["add-card"]}`}
-        style={cardStyle}
         onClick={handleClick}
       >
-        <Typography variant="h6" gutterBottom style={nameStyle}>
+        <Typography variant="h6" gutterBottom style={{ color: "#B6C2CF" }}>
           Create new board
         </Typography>
       </div>
@@ -127,7 +113,7 @@ export default function AddCard({
 
             <div className={styles["full-width"]} style={dividerMargin}>
               <Typography variant="subtitle2" className={styles.header}>
-                Board title <span style={spanColor}>*</span>
+                Board title <span className={styles["red-span"]}>*</span>
               </Typography>
               <TextField
                 id="name"

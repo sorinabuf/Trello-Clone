@@ -8,10 +8,10 @@ import { useState } from "react";
 import authStyles from "@/styles/auth.module.css";
 import pageStyles from "@/styles/pages.module.css";
 
-export default function RegisterPage() {
-  const { signUp } = useAuth();
+export default function LoginPage() {
+  const { login } = useAuth();
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -20,29 +20,23 @@ export default function RegisterPage() {
     const data = new FormData(event.currentTarget);
     const email = data.get("email")?.toString();
     const password = data.get("password")?.toString();
-    const confirm_password = data.get("confirm_password")?.toString();
 
-    if (!email || !password || !confirm_password) {
+    if (!email || !password) {
       setError("Email and password are required.");
-      return;
-    }
-
-    if (password !== confirm_password) {
-      setError("Passwords do not match.");
       return;
     }
 
     try {
       setError("");
-      setLoading(true);
-      await signUp(email, password);
+      setIsLoading(true);
+      await login(email, password);
       router.push("/");
     } catch (error) {
       console.log(error);
-      setError("Failed to register. Please try again.");
+      setError("Failed to login. Please try again.");
     }
 
-    setLoading(false);
+    setIsLoading(false);
   }
 
   return (
@@ -54,7 +48,7 @@ export default function RegisterPage() {
       >
         <Box className={authStyles["form-container"]}>
           <Typography variant="h5" className={pageStyles.header}>
-            Sign Up
+            Sign In
           </Typography>
 
           <Box component="form" onSubmit={handleSubmit} noValidate>
@@ -78,7 +72,6 @@ export default function RegisterPage() {
               className={pageStyles.header}
               style={{ marginTop: "20px" }}
             >
-              {" "}
               Password <span className={pageStyles["red-span"]}>*</span>
             </Typography>
             <TextField
@@ -90,31 +83,11 @@ export default function RegisterPage() {
               type="password"
               autoComplete="current-password"
               placeholder="Enter your password"
-              sx={{ input: { color: "#B6C2CF" } }}
-            />
-
-            <Typography
-              variant="subtitle2"
-              className={pageStyles.header}
-              style={{ marginTop: "20px" }}
-            >
-              {" "}
-              Repeat Password <span className={pageStyles["red-span"]}>*</span>
-            </Typography>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="confirm_password"
-              name="confirm_password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="Reenter your password"
               sx={{ input: { color: "#B6C2CF" }, marginBottom: "20px" }}
             />
 
-            <Link href="/login" style={{ color: "#1976D2" }}>
-              Already have an account? Sign In
+            <Link href="/register" style={{ color: "#1976D2" }}>
+              Don't have an account? Sign Up
             </Link>
 
             <Button
@@ -123,7 +96,7 @@ export default function RegisterPage() {
               fullWidth
               disableElevation
               sx={{ mt: 8, mb: 2 }}
-              disabled={loading}
+              disabled={isLoading}
             >
               Sign In
             </Button>

@@ -1,39 +1,26 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import { Grid, Typography } from "@mui/material";
-import styles from "@/styles/Boards.module.css";
+import { Typography } from "@mui/material";
+import CardLists from "@/components/CardLists";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { getBoard } from "@/utils/data";
+import styles from "@/styles/pages.module.css";
 import { useEffect, useState } from "react";
-import { getBoard, getBoardLists } from "@/utils/data";
-import AddList from "@/components/AddList";
-import CardList from "@/components/CardList";
 
-export default function Page({ params }: { params: { id: number } }) {
-  const [board, setBoard] = useState({ board_id: params.id, name: "Board" });
-  const [lists, setLists] = useState([]);
-
-  const listsStyle = {
-    margin: "20px",
-    paddingBottom: "20px"
-  };
+const BoardPage = ({ params }: { params: { id: number } }) => {
+  const [board, setBoard] = useState({ board_id: params.id, name: "" });
 
   useEffect(() => {
     getBoard(params.id).then((board) => {
       setBoard(board);
     });
-
-    getBoardLists(params.id).then((lists) => {
-      setLists(lists);
-    });
   }, []);
-
-  useEffect(() => {
-    console.log(lists)
-  }, [lists])
 
   return (
     <>
       <Navbar />
+
       <Typography
         variant="h6"
         gutterBottom
@@ -43,17 +30,11 @@ export default function Page({ params }: { params: { id: number } }) {
         {board.name}
       </Typography>
 
-      <div style={listsStyle} className={styles["scrollable-container"]}>
-        <div className={styles["card-list-width"]}>
-          <AddList boardId={params.id} lists={lists} setLists={setLists}/>
-        </div>
-
-        {lists.map((list, index) => (
-          <div className={styles["card-list-width"]} key={index}>
-            <CardList id={list["card_list_id"]} name={list["name"]} lists={lists} setLists={setLists}/>
-          </div>
-        ))}
+      <div className={styles["horizontal-scrollable-container"]}>
+        <CardLists id={params.id} />
       </div>
     </>
   );
-}
+};
+
+export default ProtectedRoute(BoardPage);

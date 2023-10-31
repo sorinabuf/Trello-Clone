@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { useState } from "react";
 import CardDialog from "./CardDialog";
-import styles from "@/styles/Boards.module.css";
+import styles from "@/styles/pages.module.css";
 import { deleteCard, updateCard } from "@/utils/data";
 import NotesIcon from "@mui/icons-material/Notes";
 
@@ -24,15 +24,11 @@ export default function Card({
 }: Props) {
   const [open, setOpen] = useState(false);
 
-  const handleOpenDialog = () => {
+  function handleOpenDialog() {
     setOpen(true);
-  };
+  }
 
-  const handleCloseDialog = (
-    name: string,
-    description: string,
-    open: boolean
-  ) => {
+  function handleCloseDialog(name: string, description: string, open: boolean) {
     setOpen(open);
 
     if (open) {
@@ -48,12 +44,12 @@ export default function Card({
       );
 
       updateCard(name, description, cardId).then(() => {
-        console.log("Updated card");
+        console.log("Updated card.");
       });
     }
-  };
+  }
 
-  const handleDeleteCard = () => {
+  function handleDeleteCard () {
     setOpen(false);
 
     deleteCard(cardId).then(() => {

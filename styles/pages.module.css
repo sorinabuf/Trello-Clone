@@ -19,6 +19,12 @@
     border-radius: 10px;
 }
 
+.delete-icon {
+    opacity: 0;
+    display: flex;
+    justify-content: end;
+}
+
 .card:hover {
     cursor: pointer;
     filter: brightness(85%);
@@ -29,13 +35,16 @@
     }
 }
 
+.add-card {
+    display: flex;
+    background-color: #282E34;
+    align-items: center;
+    justify-content: center;
+}
+
 .add-card:hover {
     cursor: pointer;
     filter: brightness(125%);
-}
-
-.card-container {
-    position: relative;
 }
 
 .popover {
@@ -58,11 +67,7 @@
     width: 100%;
 }
 
-.delete-icon {
-    opacity: 0;
-}
-
-.input-font {
+.board-input-font {
     font-family: 'Roboto', sans-serif;
     font-weight: 700 !important;
     font-size: 20px !important;
@@ -74,36 +79,38 @@
     cursor: pointer;
 }
 
-.scrollable-container {
+.horizontal-scrollable-container {
     overflow-x: auto;
     white-space: nowrap;
+    margin: 20px;
+    padding-bottom: 20px;
 }
 
-.scrollable-container::-webkit-scrollbar {
+.horizontal-scrollable-container::-webkit-scrollbar {
     background-color: #424242;
     border-radius: 10px;
     height: 5px;
     margin: 20px;
 }
 
-.scrollable-container::-webkit-scrollbar-thumb {
+.horizontal-scrollable-container::-webkit-scrollbar-thumb {
     background-color: #686868;
     border-radius: 5px;
 }
 
-.scrollable-container-vertical {
+.vertical-scrollable-container {
     overflow-y: auto;
     max-height: 400px;
 }
 
-.scrollable-container-vertical::-webkit-scrollbar {
+.vertical-scrollable-container::-webkit-scrollbar {
     background-color: #424242;
     border-radius: 10px;
     width: 5px;
     margin: 20px;
 }
 
-.scrollable-container-vertical::-webkit-scrollbar-thumb {
+.vertical-scrollable-container::-webkit-scrollbar-thumb {
     background-color: #686868;
     border-radius: 5px;
 }
@@ -140,4 +147,19 @@
 .hover-card:hover {
     cursor: pointer;
     filter: brightness(85%);
+}
+
+.red-span {
+    color: red
+}
+
+.add-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 10px;
+    padding: 15px 30px 15px 10px;
+    background-color: #282E34;
+    color: #B6C2CF;
 }

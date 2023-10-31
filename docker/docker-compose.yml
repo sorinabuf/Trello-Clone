@@ -12,7 +12,7 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
     volumes:
-      - ./api/trello-db/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - ../api/trello-db/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
       - trello-db-data:/var/lib/postgresql/data
 
   pgadmin:
@@ -26,6 +26,16 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
+
+  prometheus:
+    image: prom/prometheus:latest
+    restart: always
+    ports:
+      - 9090:9090
+    volumes:
+      - ../prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml" # specify location of config file
 
 volumes:
   trello-db-data:

@@ -1,7 +1,7 @@
 "use client";
 
-import { getUser } from "@/utils/data";
-import { firebaseAuth } from "@/utils/firebase";
+import { addUser, getUser } from "@/utils/data";
+import { firebaseAuth } from "@/utils/firebase/config";
 import {
   User,
   UserCredential,
@@ -31,8 +31,8 @@ export function useAuth() {
 
 const AuthProvider = ({ children }: any) => {
   const [currentUser, setCurrentUser] = React.useState<User | null>(null);
-  const [loading, setLoading] = React.useState<boolean>(true);
   const [currentUserId, setCurrentUserId] = React.useState<number | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(true);
   const auth = firebaseAuth;
 
   function signUp(email: string, password: string) {
@@ -53,14 +53,25 @@ const AuthProvider = ({ children }: any) => {
         setCurrentUser(user);
         console.log("User is signed in.");
 
-        getUser(user["email"]!).then((result) => {
+        setLoading(false);
+
+        getUser(user["email"]!)
+          .then((result) => {
             setCurrentUserId(result["user_id"]);
-        });
+          })
+          .catch(() => {
+            addUser(user["email"]!).then((result) => {
+              setCurrentUserId(result["user_id"]);
+
+              console.log("User added to database");
+            });
+          });
       } else {
         setCurrentUser(null);
         console.log("No user is signed in.");
+
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return unsubscribe;
